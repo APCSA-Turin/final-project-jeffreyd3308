@@ -1,10 +1,13 @@
 package com.example;
 
-public class Display {
+import javax.swing.*;
+import java.awt.*;
+
+public class Display extends GradientPanel {
     private double currentTemp;
     private double minTemp;
     private double maxTemp;
-    private double humidity;
+    private int humidity;
     private String description;
     private String icon;
     private String name;
@@ -12,7 +15,13 @@ public class Display {
     private double windSpeed;
     private int visibility;
 
-    public Display(String name, double currentTemp, double minTemp, double maxTemp, double humidity, String description, String icon, int windDir, double windSpeed, int visibility) {
+    //swing objects
+    private JPanel descriptivePanel;
+    private JLabel nameText;
+    private JLabel descriptionText;
+
+    public Display(String name, double currentTemp, double minTemp, double maxTemp, int humidity, String description, String icon, int windDir, double windSpeed, int visibility) {
+        super(Color.BLUE, Color.CYAN, new FlowLayout());
         this.name = name;
         this.currentTemp = currentTemp;
         this.minTemp = minTemp;
@@ -23,6 +32,17 @@ public class Display {
         this.windDir = windDir;
         this.windSpeed = windSpeed;
         this.visibility = visibility;
+
+        //load
+        descriptivePanel = new GradientPanel(Color.darkGray, Color.BLACK, new FlowLayout());
+        add(descriptivePanel);
+        String iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+        ImageIcon image = new ImageIcon(iconUrl);
+        nameText = new JLabel(name, image, JLabel.CENTER);
+        descriptivePanel.add(nameText);
+
+
+        descriptivePanel.setVisible(true);
     }
 
     public double getCurrentTemp() {
@@ -37,7 +57,7 @@ public class Display {
         return maxTemp;
     }
 
-    public double getHumidity() {
+    public int getHumidity() {
         return humidity;
     }
 
