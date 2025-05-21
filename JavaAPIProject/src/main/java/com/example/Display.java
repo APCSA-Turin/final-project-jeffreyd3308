@@ -1,7 +1,12 @@
 package com.example;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class Display extends GradientPanel {
     private double currentTemp;
@@ -20,8 +25,9 @@ public class Display extends GradientPanel {
     private JLabel nameText;
     private JLabel descriptionText;
 
-    public Display(String name, double currentTemp, double minTemp, double maxTemp, int humidity, String description, String icon, int windDir, double windSpeed, int visibility) {
-        super(Color.BLUE, Color.CYAN, new FlowLayout());
+    public Display(String name, double currentTemp, double minTemp, double maxTemp, int humidity, String description, String icon, int windDir, double windSpeed, int visibility) throws IOException {
+        super(Color.BLUE, Color.GREEN, new FlowLayout());
+        setPreferredSize(new Dimension(300, 100));
         this.name = name;
         this.currentTemp = currentTemp;
         this.minTemp = minTemp;
@@ -34,15 +40,19 @@ public class Display extends GradientPanel {
         this.visibility = visibility;
 
         //load
-        descriptivePanel = new GradientPanel(Color.darkGray, Color.BLACK, new FlowLayout());
+        //load in different colors depending on weather
+        descriptivePanel = new GradientPanel(Color.darkGray, Color.BLACK, new BorderLayout());
+
+        descriptivePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        descriptivePanel.setPreferredSize(new Dimension(250, 90));
         add(descriptivePanel);
         String iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
-        ImageIcon image = new ImageIcon(iconUrl);
-        nameText = new JLabel(name, image, JLabel.CENTER);
-        descriptivePanel.add(nameText);
+        URL url = new URL(iconUrl);
+        BufferedImage image = ImageIO.read(url);
+        ImageIcon imageIcon = new ImageIcon(image);
+        nameText = new JLabel(name, imageIcon, JLabel.CENTER);
+        descriptivePanel.add(nameText, BorderLayout.CENTER);
 
-
-        descriptivePanel.setVisible(true);
     }
 
     public double getCurrentTemp() {

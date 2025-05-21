@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class Input extends GradientPanel {
     private JTextField input;
@@ -37,7 +39,12 @@ public class Input extends GradientPanel {
         int windDir = obj.getJSONObject("wind").getInt("deg");
         double windSpeed = obj.getJSONObject("wind").getDouble("speed");
         int visibility = obj.getInt("visibility");
-        Display display = new Display(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility);
+        Display display = null;
+        try {
+            display = new Display(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return display;
     }
 
@@ -56,4 +63,6 @@ public class Input extends GradientPanel {
     public JLabel getText() {
         return text;
     }
+
+    public void setObj(JSONObject obj) {this.obj = obj;}
 }

@@ -20,7 +20,7 @@ public class App
         JFrame mainframe = new JFrame("mainframe");
         mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainframe.setResizable(false);
-        mainframe.setSize(400, 300);
+        mainframe.setSize(new Dimension(500, 400));
         JPanel gui = new GradientPanel(new Color(75, 0, 250, 100), new Color(75,0,250,200), new FlowLayout());
         mainframe.setContentPane(gui);
 
@@ -29,6 +29,7 @@ public class App
         inputArea.addListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Display display = null;
                 String city = inputArea.getInput().getText();
                 String endpoint = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=41b37103b67fe0f874e4a4a93ac37cdf";
                 String data = null;
@@ -40,7 +41,12 @@ public class App
                 JSONObject obj = new JSONObject(data);
                 System.out.println(obj);
                 System.out.println(obj.getJSONObject("main").getInt("humidity"));
+                inputArea.setObj(obj);
                 //create display and add display
+                display = inputArea.createDisplay();
+                gui.add(display);
+                mainframe.setVisible(false);
+                mainframe.setVisible(true);
             }
         });
         gui.add(inputArea);
