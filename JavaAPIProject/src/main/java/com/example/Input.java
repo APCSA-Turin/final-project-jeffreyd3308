@@ -16,19 +16,19 @@ public class Input extends GradientPanel {
     private JLabel text;
     private JSONObject obj;
 
-    public Input(String defaultString, int size) {
+    public Input() {
         super(Color.BLUE, Color.CYAN, new FlowLayout());
         setPreferredSize(new Dimension(300, 100));
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        text = new JLabel(defaultString);
-        input = new JTextField(size);
+        text = new JLabel("Enter a city name.");
+        input = new JTextField(20);
         submitter = new JButton("Submit");
         add(text);
         add(input);
         add(submitter);
     }
 
-    public Display createDisplay() {
+    public DisplayPreview createDisplay() {
         String name = obj.getString("name");
         double currentTemp = obj.getJSONObject("main").getDouble("temp");
         double minTemp = obj.getJSONObject("main").getDouble("temp_min");
@@ -39,13 +39,13 @@ public class Input extends GradientPanel {
         int windDir = obj.getJSONObject("wind").getInt("deg");
         double windSpeed = obj.getJSONObject("wind").getDouble("speed");
         int visibility = obj.getInt("visibility");
-        Display display = null;
+        DisplayPreview displayPreview = null;
         try {
-            display = new Display(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility);
+            displayPreview = new DisplayPreview(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return display;
+        return displayPreview;
     }
 
     public JTextField getInput() {
