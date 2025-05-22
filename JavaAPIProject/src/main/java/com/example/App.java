@@ -30,12 +30,23 @@ public class App
             @Override
             public void actionPerformed(ActionEvent e) {
                 Boolean valid = false;
+                //remove all instances of displaypreview
+                for (int i = 0; i < gui.getComponentCount(); i++) {
+                    if (gui.getComponent(i) instanceof DisplayPreview) {
+                        gui.remove(i);
+                    }
+                }
                 DisplayPreview displayPreview = null;
                 String city = inputArea.getInput().getText();
+                //weather
                 String endpoint = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=41b37103b67fe0f874e4a4a93ac37cdf";
                 String data = null;
+                //forecast
+                String endpointF = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&APPID=41b37103b67fe0f874e4a4a93ac37cdf";
+                String dataF = null;
                 try {
                     data = API.getData(endpoint);
+                    dataF = API.getData(endpointF);
                     valid = true;
                 } catch (Exception ex) {
                     inputArea.getText().setText("Not a valid city name.");
@@ -46,6 +57,10 @@ public class App
                     System.out.println(obj);
                     System.out.println(obj.getJSONObject("main").getInt("humidity"));
                     inputArea.setObj(obj);
+                    //forecast
+                    JSONObject forecast = new JSONObject(dataF);
+                    System.out.println(forecast);
+                    inputArea.setForecast(forecast);
                     //create display and add display
                     displayPreview = inputArea.createDisplay();
                     gui.add(displayPreview);

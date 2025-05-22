@@ -1,5 +1,7 @@
 package com.example;
 
+import org.json.JSONArray;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -21,13 +23,16 @@ public class DisplayPreview extends GradientPanel {
     private double windSpeed;
     private int visibility;
 
+    //forecase
+    private JSONArray forecast;
+
     //swing objects
     private JPanel descriptivePanel;
     private JLabel nameText;
     private JLabel descriptionText;
     private JButton openDisplay;
 
-    public DisplayPreview(String name, double currentTemp, double minTemp, double maxTemp, int humidity, String description, String icon, int windDir, double windSpeed, int visibility) throws IOException {
+    public DisplayPreview(String name, double currentTemp, double minTemp, double maxTemp, int humidity, String description, String icon, int windDir, double windSpeed, int visibility, JSONArray forecast) throws IOException {
         super(Color.BLUE, Color.GREEN, new FlowLayout());
         setPreferredSize(new Dimension(300, 100));
         this.name = name;
@@ -40,6 +45,7 @@ public class DisplayPreview extends GradientPanel {
         this.windDir = windDir;
         this.windSpeed = windSpeed;
         this.visibility = visibility;
+        this.forecast = forecast;
 
         //load PREVIEW, open new window on click More..
         //load in different colors depending on weather
@@ -108,5 +114,9 @@ public class DisplayPreview extends GradientPanel {
 
     public int getVisibility() {
         return visibility;
+    }
+
+    public JSONArray getForecast() {
+        return forecast;
     }
 }

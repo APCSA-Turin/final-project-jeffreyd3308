@@ -1,6 +1,8 @@
 package com.example;
 //import java.util.Scanner;
+//finished class unless bug/troubleshoot
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -15,6 +17,7 @@ public class Input extends GradientPanel {
     private JButton submitter;
     private JLabel text;
     private JSONObject obj;
+    private JSONObject forecast;
 
     public Input() {
         super(Color.BLUE, Color.CYAN, new FlowLayout());
@@ -39,9 +42,10 @@ public class Input extends GradientPanel {
         int windDir = obj.getJSONObject("wind").getInt("deg");
         double windSpeed = obj.getJSONObject("wind").getDouble("speed");
         int visibility = obj.getInt("visibility");
+        JSONArray forecastList = forecast.getJSONArray("list");
         DisplayPreview displayPreview = null;
         try {
-            displayPreview = new DisplayPreview(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility);
+            displayPreview = new DisplayPreview(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility, forecastList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -65,4 +69,6 @@ public class Input extends GradientPanel {
     }
 
     public void setObj(JSONObject obj) {this.obj = obj;}
+
+    public void setForecast(JSONObject forecast) {this.forecast = forecast;}
 }
