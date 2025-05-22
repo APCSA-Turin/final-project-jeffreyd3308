@@ -37,15 +37,14 @@ public class Input extends GradientPanel {
         double minTemp = obj.getJSONObject("main").getDouble("temp_min");
         double maxTemp = obj.getJSONObject("main").getDouble("temp_max");
         int humidity = obj.getJSONObject("main").getInt("humidity");
-        String description = obj.getJSONArray("weather").getJSONObject(0).getString("description");
-        String icon = obj.getJSONArray("weather").getJSONObject(0).getString("icon");
+        JSONArray weather = obj.getJSONArray("weather");
         int windDir = obj.getJSONObject("wind").getInt("deg");
         double windSpeed = obj.getJSONObject("wind").getDouble("speed");
         int visibility = obj.getInt("visibility");
         JSONArray forecastList = forecast.getJSONArray("list");
         DisplayPreview displayPreview = null;
         try {
-            displayPreview = new DisplayPreview(name, currentTemp, minTemp, maxTemp, humidity, description, icon, windDir, windSpeed, visibility, forecastList);
+            displayPreview = new DisplayPreview(name, currentTemp, minTemp, maxTemp, humidity, windDir, windSpeed, visibility, forecastList, weather);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
