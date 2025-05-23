@@ -95,8 +95,17 @@ public class DisplayPreview extends GradientPanel {
         openDisplay = new JButton("More..");
         addListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                Display displayWindow = new Display("Display");
-                displayWindow.reload();
+                boolean alreadyIn = false;
+                //no duplicates
+                for (int i = 0; i < Display.getDisplayFrames().size(); i++) {
+                    if (Display.getDisplayFrames().get(i).getTitle().equals(name)) {
+                        alreadyIn = true;
+                    }
+                }
+                if (!alreadyIn) {
+                    Display displayWindow = new Display(name);
+                    displayWindow.reload();
+                }
                 //save
             }
         });
