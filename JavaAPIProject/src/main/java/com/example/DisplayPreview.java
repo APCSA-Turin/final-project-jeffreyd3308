@@ -4,6 +4,7 @@ import org.json.JSONArray;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +34,7 @@ public class DisplayPreview extends GradientPanel {
     private JLabel nameText;
     private JLabel descriptionText;
     private JButton openDisplay;
+    private JLabel tempText;
 
     public DisplayPreview(String name, double currentTemp, double minTemp, double maxTemp, int humidity, int windDir, double windSpeed, int visibility, JSONArray forecast, JSONArray weather) throws IOException {
         super(Color.DARK_GRAY, Color.BLACK, new FlowLayout());
@@ -61,9 +63,10 @@ public class DisplayPreview extends GradientPanel {
         Color text = Color.black;
         Color end = Color.yellow;
         if (icon.substring(icon.length() - 1).equals("d")) {
-            start = new Color(200, 125, 0, 225);
+            start = new Color(200, 125, 0, 208);
         } else if (icon.substring(icon.length() - 1).equals("n")) {
             start = Color.darkGray;
+            text = Color.white;
         }
         if (id > 800) {
             end = Color.lightGray;
@@ -84,14 +87,25 @@ public class DisplayPreview extends GradientPanel {
         }
         descriptivePanel = new GradientPanel(start, end, new BorderLayout());
         descriptivePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        nameText = new JLabel(name, imageIcon, JLabel.CENTER);
-        nameText.setForeground(text);
-
         descriptivePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        descriptivePanel.setPreferredSize(new Dimension(250, 90));
+        descriptivePanel.setPreferredSize(new Dimension(350, 190));
         add(descriptivePanel);
 
-        descriptivePanel.add(nameText, BorderLayout.CENTER);
+        String temperature = Double.toString(currentTemp);
+        tempText = new JLabel((temperature + " F°"));
+        tempText.setBorder(new EmptyBorder(0, 0, 0, 25));
+        tempText.setForeground(text);
+        Font tempFont = new Font("Arial", Font.BOLD, 25);
+        tempText.setFont(tempFont);
+
+        nameText = new JLabel(name, imageIcon, JLabel.CENTER);
+        nameText.setBorder(new EmptyBorder(0, 25, 0, 0));
+        nameText.setForeground(text);
+        Font nameFont = new Font("Arial", Font.BOLD, 15);
+        nameText.setFont(nameFont);
+
+        descriptivePanel.add(nameText, BorderLayout.WEST);
+        descriptivePanel.add(tempText, BorderLayout.EAST);
         openDisplay = new JButton("More..");
         addListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
@@ -103,7 +117,12 @@ public class DisplayPreview extends GradientPanel {
                     }
                 }
                 if (!alreadyIn) {
-                    Display displayWindow = new Display(name);
+                    Display displayWindow = null;
+                    try {
+                        displayWindow = new Display(name, currentTemp, minTemp, maxTemp, humidity, windDir, windSpeed, visibility, forecast, weather);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     displayWindow.reload();
                 }
                 //save

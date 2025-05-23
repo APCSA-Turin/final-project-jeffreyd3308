@@ -28,6 +28,11 @@ public class App
 
         //input setup
         Input inputArea = new Input();
+        inputArea.setPreferredSize(new Dimension(400, 100));
+        inputArea.getText().setPreferredSize(new Dimension(400, 50));
+        inputArea.getText().setHorizontalAlignment(SwingConstants.CENTER);
+        Font font = new Font("Arial", Font.BOLD, 25);
+        inputArea.getText().setFont(font);
         inputArea.addListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -39,12 +44,7 @@ public class App
                     }
                 }
                 DisplayPreview displayPreview = null;
-                String city = inputArea.getInput().getText();
-                for (int i = 0; i < city.length(); i++) {
-                    if (city.substring(i, i+1).equals(" ")) {
-                        city = city.substring(0, i) + "+" + city.substring(i+1);
-                    }
-                }
+                String city = cityString(inputArea.getInput().getText());
                 //weather
                 String endpoint = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=41b37103b67fe0f874e4a4a93ac37cdf";
                 String data = null;
@@ -70,6 +70,7 @@ public class App
                     inputArea.setForecast(forecast);
                     //create display and add display
                     displayPreview = inputArea.createDisplay();
+                    displayPreview.setPreferredSize(new Dimension(400, 200));
                     gui.add(displayPreview);
                     mainframe.setVisible(false);
                     mainframe.setVisible(true);
@@ -78,5 +79,23 @@ public class App
         });
         gui.add(inputArea);
         mainframe.setVisible(true);
+    }
+
+    public static String cityString(String city) {
+        for (int i = 0; i < city.length(); i++) {//make string readable by api
+            if (city.substring(i, i+1).equals(" ")) {
+                city = city.substring(0, i) + "+" + city.substring(i+1);
+            }
+        }
+        int removalIndex = city.length();
+        for (int i = city.length() - 1; i >= 0; i--) {//remove plus at end
+            if (!city.substring(i, i+1).equals("+")) {
+                removalIndex = i + 1;
+                break;
+            }
+        }
+
+        city = city.substring(0, removalIndex);
+        return city;
     }
 }
