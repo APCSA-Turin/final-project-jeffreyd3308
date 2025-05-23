@@ -38,6 +38,11 @@ public class App
                 }
                 DisplayPreview displayPreview = null;
                 String city = inputArea.getInput().getText();
+                for (int i = 0; i < city.length(); i++) {
+                    if (city.substring(i, i+1).equals(" ")) {
+                        city = city.substring(0, i) + "+" + city.substring(i+1);
+                    }
+                }
                 //weather
                 String endpoint = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=41b37103b67fe0f874e4a4a93ac37cdf";
                 String data = null;
