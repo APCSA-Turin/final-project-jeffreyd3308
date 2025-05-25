@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -48,6 +50,16 @@ public class Display extends JFrame{
         this.weather = weather;
         this.id = weather.getJSONObject(0).getInt("id");
 
+        addWindowListener(new WindowAdapter() {//remove this from frames when closed to allow a new frame to be opened
+            @Override
+            public void windowClosing(WindowEvent e) {
+                for (int i = 0; i < frames.size(); i++) {
+                    if (frames.get(i).getTitle().equals(name)) {
+                        frames.remove(i);
+                    }
+                }
+            }
+        });
 
         String iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
         URL url = new URL(iconUrl);
