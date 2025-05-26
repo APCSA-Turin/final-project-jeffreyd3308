@@ -3,6 +3,7 @@ import org.json.JSONArray;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -73,7 +74,7 @@ public class Display extends JFrame{
 
         setIconImage(image);
 
-        setSize(new Dimension(300, 800));
+        setSize(new Dimension(300, 600));
         setResizable(false);
         frames.add(this);
 
@@ -154,7 +155,61 @@ public class Display extends JFrame{
         temperaturePredUI.add(averageTemp);
         displayGUI.add(temperaturePredUI);
 
+        JPanel wind = new GradientPanel(Color.GRAY, Color.DARK_GRAY, new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wind.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        wind.setPreferredSize(new Dimension(250, 90));
+        Font windFont = new Font("Arial", Font.BOLD, 25);
+        JPanel windSection = new JPanel(new BorderLayout());
+        windSection.setOpaque(false);
+        windSection.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        windSection.setPreferredSize(new Dimension(250, 45));
+        JLabel windName = new JLabel("Wind:");
+        windName.setFont(windFont);
+        windName.setForeground(Color.WHITE);
+        windName.setBorder(new EmptyBorder(0, 25, 0, 0));
+        JLabel speed = new JLabel(windSpeed + "mph");
+        speed.setFont(windFont);
+        speed.setForeground(Color.WHITE);
+        speed.setBorder(new EmptyBorder(0, 0, 0, 25));
+        windSection.add(windName, BorderLayout.WEST);
+        windSection.add(speed, BorderLayout.EAST);
+        wind.add(windSection);
+        JPanel windDirectionSection = new JPanel(new BorderLayout());
+        windDirectionSection.setOpaque(false);
+        windDirectionSection.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        windDirectionSection.setPreferredSize(new Dimension(250, 45));
+        JLabel windDirection = new JLabel("Direction:");
+        windDirection.setFont(windFont);
+        windDirection.setForeground(Color.WHITE);
+        windDirection.setBorder(new EmptyBorder(0, 25, 0, 0));
+        JLabel windDegree = new JLabel(windDir + "°");
+        windDegree.setFont(windFont);
+        windDegree.setForeground(Color.WHITE);
+        windDegree.setBorder(new EmptyBorder(0, 0, 0, 25));
+        windDirectionSection.add(windDirection, BorderLayout.WEST);
+        windDirectionSection.add(windDegree, BorderLayout.EAST);
+        wind.add(windDirectionSection);
+        displayGUI.add(wind);
 
+        JPanel otherInformation = new GradientPanel(Color.BLUE, Color.CYAN, null);
+        otherInformation.setLayout(new BoxLayout(otherInformation, BoxLayout.Y_AXIS));
+        otherInformation.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        otherInformation.setPreferredSize(new Dimension(250, 75));
+        Font otherFont = new Font("Arial", Font.BOLD, 16);
+        JLabel weatherVis = new JLabel("Visibility: " + visibility);
+        weatherVis.setFont(otherFont);
+        weatherVis.setForeground(Color.BLACK);
+        weatherVis.setAlignmentX(Component.CENTER_ALIGNMENT);
+        weatherVis.setBorder(new EmptyBorder(10, 0, 0, 0));
+        otherInformation.add(weatherVis, BorderLayout.NORTH);
+        JLabel weatherHum = new JLabel("Humidity: " + humidity);
+        weatherHum.setFont(otherFont);
+        weatherHum.setForeground(Color.BLACK);
+        weatherHum.setAlignmentX(Component.CENTER_ALIGNMENT);
+        weatherHum.setBorder(new EmptyBorder(20, 0, 10, 0));
+        otherInformation.add(weatherHum, BorderLayout.WEST);
+
+        displayGUI.add(otherInformation);
     }
 
     public void reload() {
