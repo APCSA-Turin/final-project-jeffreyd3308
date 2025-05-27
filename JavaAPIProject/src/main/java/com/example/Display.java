@@ -1,5 +1,6 @@
 package com.example;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,8 +35,8 @@ public class Display extends JFrame{
     private Color end;
 
     //JSON
-    private JSONArray forecast;
-    private JSONArray weather;
+    private JSONArray forecast; //list in forecast output
+    private JSONArray weather; //weather in weather output
 
     //frameObj
     private JPanel displayGUI;
@@ -64,6 +66,13 @@ public class Display extends JFrame{
                     if (frames.get(i).getTitle().equals(name)) {
                         frames.remove(i);
                     }
+                }
+
+                //save via json
+                try {
+                    saveJSON();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });
@@ -285,5 +294,38 @@ public class Display extends JFrame{
             total += temperatures.get(i);
         }
         return (int) total / temperatures.size();
+    }
+
+    public void saveJSON() throws IOException {
+        FileWriter file = new FileWriter("JavaAPIProject/src/main/java/com/example/weather.json");
+        //alter json object if same name
+        //process in chunks
+
+        JSONObject allObjs = new JSONObject(file);
+        JSONObject mainObj = new JSONObject();
+        JSONObject mainTypes = new JSONObject();
+        mainTypes.put("name", name);
+        mainTypes.put("currentTemp", currentTemp);
+        mainTypes.put("minTemp", minTemp);
+        mainTypes.put("maxTemp", maxTemp);
+        mainTypes.put("humidity", humidity);
+        mainTypes.put("description", description);
+        mainTypes.put("icon", icon);
+        JSONObject wind = new JSONObject();
+        wind.put("windSpeed", windSpeed);
+        wind.put("windDirection", windDir);
+        mainTypes.put("wind", wind);
+        mainTypes.put("visibility", visibility);
+        mainTypes.put("id", id);
+        JSONObject panelColors = new JSONObject();
+        panelColors.put("start", start);
+        panelColors.put("end", end);
+        mainTypes.put("panelColors", panelColors);
+        mainObj.put("main", mainTypes);
+        mainObj.put("weather", weather);
+        mainObj.put("forecast", forecast);
+        allObjs.put(name, mainObj);
+
+        file.write(allObjs.toString(2));
     }
 }
