@@ -323,9 +323,10 @@ public class Display extends JFrame{
         mainTypes.put("panelColors", panelColors);
         mainObj.put("main", mainTypes);
         mainObj.put("weather", weather);
-        mainObj.put("forecast", forecast);
         allObjs.put(name, mainObj);
 
         file.write(allObjs.toString(2));
+
+
     }
 }
