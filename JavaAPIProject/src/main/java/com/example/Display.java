@@ -327,6 +327,6 @@ public class Display extends JFrame{
 
         file.write(allObjs.toString(2));
 
-
+        //use json parser
     }
 }
