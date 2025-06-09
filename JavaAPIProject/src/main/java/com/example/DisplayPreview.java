@@ -91,6 +91,7 @@ public class DisplayPreview extends GradientPanel {
         descriptivePanel.setPreferredSize(new Dimension(350, 190));
         add(descriptivePanel);
 
+        //setup for displaying information
         String temperature = Double.toString(currentTemp);
         tempText = new JLabel((temperature + " F°"));
         tempText.setBorder(new EmptyBorder(0, 0, 0, 25));
@@ -107,6 +108,7 @@ public class DisplayPreview extends GradientPanel {
         descriptivePanel.add(nameText, BorderLayout.WEST);
         descriptivePanel.add(tempText, BorderLayout.EAST);
         openDisplay = new JButton("More..");
+        //if More... is clicked create and open a Display object
         addListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 boolean alreadyIn = false;

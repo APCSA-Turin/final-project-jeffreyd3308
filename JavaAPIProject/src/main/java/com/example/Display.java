@@ -67,16 +67,10 @@ public class Display extends JFrame{
                         frames.remove(i);
                     }
                 }
-
-                //save via json
-                try {
-                    saveJSON();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
             }
         });
 
+        //acquire icon
         String iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
         URL url = new URL(iconUrl);
         BufferedImage image = ImageIO.read(url);
@@ -86,7 +80,7 @@ public class Display extends JFrame{
         setSize(new Dimension(300, 600));
         setResizable(false);
         frames.add(this);
-
+        //change color gradient depending on time of day
         if (icon.substring(icon.length() - 1).equals("d")) {
             start = new Color(236, 152, 0, 255);
             end = new Color(119, 65, 15, 208);
@@ -99,6 +93,7 @@ public class Display extends JFrame{
         this.displayGUI = new GradientPanel(start, end, new FlowLayout());
         add(displayGUI);
 
+        //setting up the display
         this.basicUI = new GradientPanel(Color.DARK_GRAY, Color.BLACK, null);
         basicUI.setLayout(new BoxLayout(basicUI, BoxLayout.Y_AXIS));
         basicUI.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -138,6 +133,7 @@ public class Display extends JFrame{
 
         displayGUI.add(basicUI);
 
+        //setting up forecast JPanel
         temperaturePredUI = new GradientPanel(Color.BLUE, Color.CYAN, new FlowLayout());
         temperaturePredUI.setPreferredSize(new Dimension(250, 160));
         temperaturePredUI.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -164,6 +160,7 @@ public class Display extends JFrame{
         temperaturePredUI.add(averageTemp);
         displayGUI.add(temperaturePredUI);
 
+        //continued display setup
         JPanel wind = new GradientPanel(Color.GRAY, Color.DARK_GRAY, new FlowLayout(FlowLayout.CENTER, 0, 0));
         wind.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         wind.setPreferredSize(new Dimension(250, 90));
@@ -200,6 +197,7 @@ public class Display extends JFrame{
         wind.add(windDirectionSection);
         displayGUI.add(wind);
 
+        //continued display setup
         JPanel otherInformation = new GradientPanel(Color.BLUE, Color.CYAN, null);
         otherInformation.setLayout(new BoxLayout(otherInformation, BoxLayout.Y_AXIS));
         otherInformation.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -221,6 +219,7 @@ public class Display extends JFrame{
         displayGUI.add(otherInformation);
     }
 
+    //reload frame to allow for updated information
     public void reload() {
         setVisible(false);
         setVisible(true);
@@ -230,6 +229,7 @@ public class Display extends JFrame{
         return frames;
     }
 
+    //takes the first 5 in the forecast list and displays them
     public ArrayList<JPanel> createTempPredictions(JSONArray forecast) throws IOException {
         ArrayList<JPanel> returnPanel = new ArrayList<JPanel>();
 
@@ -271,6 +271,7 @@ public class Display extends JFrame{
         return returnPanel;
     }
 
+    //convert UTC/GMT to ET
     public String convertTime(String time) {
         String hour = time.substring(time.length() - 8, time.length() - 6);
         if (Integer.parseInt(hour) - 5 < 0) {
@@ -288,45 +289,12 @@ public class Display extends JFrame{
         return hour + timeOfDay;
     }
 
+    //calculates average of a list of temperatures
     public int calculateTempAverage(ArrayList<Double> temperatures) {
         double total = 0;
         for (int i = 0; i < temperatures.size(); i++) {
             total += temperatures.get(i);
         }
         return (int) total / temperatures.size();
-    }
-
-    public void saveJSON() throws IOException {
-        FileWriter file = new FileWriter("JavaAPIProject/src/main/java/com/example/weather.json");
-        //alter json object if same name
-        //process in chunks
-
-        JSONObject allObjs = new JSONObject(file);
-        JSONObject mainObj = new JSONObject();
-        JSONObject mainTypes = new JSONObject();
-        mainTypes.put("name", name);
-        mainTypes.put("currentTemp", currentTemp);
-        mainTypes.put("minTemp", minTemp);
-        mainTypes.put("maxTemp", maxTemp);
-        mainTypes.put("humidity", humidity);
-        mainTypes.put("description", description);
-        mainTypes.put("icon", icon);
-        JSONObject wind = new JSONObject();
-        wind.put("windSpeed", windSpeed);
-        wind.put("windDirection", windDir);
-        mainTypes.put("wind", wind);
-        mainTypes.put("visibility", visibility);
-        mainTypes.put("id", id);
-        JSONObject panelColors = new JSONObject();
-        panelColors.put("start", start);
-        panelColors.put("end", end);
-        mainTypes.put("panelColors", panelColors);
-        mainObj.put("main", mainTypes);
-        mainObj.put("weather", weather);
-        allObjs.put(name, mainObj);
-
-        file.write(allObjs.toString(2));
-
-        //use json parser
     }
 }

@@ -32,6 +32,7 @@ public class Input extends GradientPanel {
     }
 
     public DisplayPreview createDisplay() {
+        //parse JSON info
         String name = obj.getString("name");
         double currentTemp = obj.getJSONObject("main").getDouble("temp");
         double minTemp = obj.getJSONObject("main").getDouble("temp_min");

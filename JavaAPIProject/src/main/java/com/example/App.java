@@ -10,10 +10,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
     public static void main( String[] args ) throws Exception
@@ -34,6 +31,8 @@ public class App
         Font font = new Font("Arial", Font.BOLD, 25);
         inputArea.getText().setFont(font);
         inputArea.addListener(new ActionListener() {
+            //allows user to input city name
+            //uses city name as an id to call api
             @Override
             public void actionPerformed(ActionEvent e) {
                 Boolean valid = false;
@@ -81,6 +80,7 @@ public class App
         mainframe.setVisible(true);
     }
 
+    //converts all spaces into + as the API requires + to separate words in city name
     public static String cityString(String city) {
         for (int i = 0; i < city.length(); i++) {//make string readable by api
             if (city.substring(i, i+1).equals(" ")) {
